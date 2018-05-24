@@ -24,20 +24,21 @@ namespace Geek.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("{id}")]
+        public async Task<CalcResult> Get(Guid id)
         {
-            return new string[] { "value1", "value2" };
+            return await _calcResRepo.GetByGuidAsync(id);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        public IEnumerable<CalcResult> Get()
         {
-            return "value";
+            return _calcResRepo.GetAll();
         }
+
 
         [HttpPost]
-        [Route("addition")]
+        [Route("addition/{a}/{b}")]
         public async Task<IActionResult> AdditionPost(double a, double b)
         {
             _logger.LogTrace($"[AdditionalPost] first number: {a}, second number: {b}");
@@ -60,7 +61,7 @@ namespace Geek.Controllers
         }
 
         [HttpPost]
-        [Route("subtraction")]
+        [Route("subtraction/{a}/{b}")]
         public async Task<IActionResult> SubtractionPost(double a, double b)
         {
             _logger.LogTrace($"[SubtractionPost] first number: {a}, second number: {b}");
@@ -83,7 +84,7 @@ namespace Geek.Controllers
         }
 
         [HttpPost]
-        [Route("multiplication")]
+        [Route("multiplication/{a}/{b}")]
         public async Task<IActionResult> MultiplicationPost(double a, double b)
         {
             _logger.LogTrace($"[MultiplicationPost] first number: {a}, second number: {b}");
@@ -106,7 +107,7 @@ namespace Geek.Controllers
         }
 
         [HttpPost]
-        [Route("division")]
+        [Route("division/{a}/{b}")]
         public async Task<IActionResult> DivisionPost(double a, double b)
         {
             _logger.LogTrace($"[DivisionPost] first number: {a}, second number: {b}");
@@ -129,7 +130,7 @@ namespace Geek.Controllers
         }
 
         [HttpPost]
-        [Route("exponentiation")]
+        [Route("exponentiation/{a}/{b}")]
         public async Task<IActionResult> ExponentiationPost(double number)
         {
             _logger.LogTrace($"[ExponentiationPost] number: {number}");
@@ -149,16 +150,6 @@ namespace Geek.Controllers
             _logger.LogTrace($"[ExponentiationPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
 
             return Ok(calcRes.Id);
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

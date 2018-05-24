@@ -9,7 +9,7 @@ namespace Geek.Infrastructure.Repository
 {
     public class CalcResultRepository : BaseRepository<CalcResult>, ICalcResultRepository
     {
-        protected CalcResultRepository(DbContext dbContext) : base(dbContext)
+        public CalcResultRepository(DbContext dbContext) : base(dbContext)
         {
         }
     }

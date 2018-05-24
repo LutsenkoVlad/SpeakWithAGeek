@@ -29,9 +29,9 @@ namespace Geek
         {
             services.AddDbContext<GeekContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddSingleton<DbContext, DbContext>();
-            services.AddTransient<ICalcResultRepository, CalcResultRepository>();
-            services.AddTransient<ICalculateService, CalculateService>();
+            services.AddSingleton<DbContext, GeekContext>();
+            services.AddScoped<ICalcResultRepository, CalcResultRepository>();
+            services.AddScoped<ICalculateService, CalculateService>();
             services.AddMvc();
         }
 

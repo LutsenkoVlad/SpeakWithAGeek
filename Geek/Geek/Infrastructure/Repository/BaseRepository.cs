@@ -38,6 +38,8 @@ namespace Geek.Infrastructure.Repository
         public async Task SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 
         public void SaveChanges() => _dbContext.SaveChanges();
+
+        public async Task<TEntity> GetByGuidAsync(Guid guid) => await _dbSet.FindAsync(guid);
     }
 
     public interface IRepository<TEntity>
@@ -51,5 +53,6 @@ namespace Geek.Infrastructure.Repository
         TEntity GetById(int id);
         Task SaveChangesAsync();
         void SaveChanges();
+        Task<TEntity> GetByGuidAsync(Guid id);
     }
 }
