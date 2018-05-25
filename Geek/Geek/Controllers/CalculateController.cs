@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Logger;
 using Geek.Infrastructure.Repository;
 using Geek.Infrastructure.Service;
-using Geek.Models;
+using Geek.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -15,9 +16,9 @@ namespace Geek.Controllers
     {
         private readonly ICalcResultRepository _calcResRepo;
         private readonly ICalculateService _calcService;
-        private readonly ILogger<CalculateController> _logger;
+        private readonly ILoggerManager _logger;
 
-        public CalculateController(ICalcResultRepository repository, ICalculateService calcService, ILogger<CalculateController> logger)
+        public CalculateController(ICalcResultRepository repository, ICalculateService calcService, ILoggerManager logger)
         {
             _calcResRepo = repository;
             _calcService = calcService;
@@ -27,13 +28,17 @@ namespace Geek.Controllers
         [HttpGet("{id}")]
         public async Task<CalcResult> Get(Guid id)
         {
+            _logger.LogInfo($"[Get] id: {id}");
+
             return await _calcResRepo.GetByGuidAsync(id);
         }
 
         [HttpGet]
-        public IEnumerable<CalcResult> Get()
+        public async Task<IList<CalcResult>> Get()
         {
-            return _calcResRepo.GetAll();
+            _logger.LogInfo($"[GetAll]");
+
+            return await _calcResRepo.ToListAsync();
         }
 
 
@@ -41,7 +46,7 @@ namespace Geek.Controllers
         [Route("addition/{a}/{b}")]
         public async Task<IActionResult> AdditionPost(double a, double b)
         {
-            _logger.LogTrace($"[AdditionalPost] first number: {a}, second number: {b}");
+            _logger.LogInfo($"[AdditionalPost] first number: {a}, second number: {b}");
 
             CalcResult calcRes = null;
             try
@@ -53,9 +58,10 @@ namespace Geek.Controllers
             catch(Exception ex)
             {
                 _logger.LogError($"[SubtractionPost] error: {ex.Message}, stack: {ex.StackTrace}, innerException: {ex.InnerException?.Message}");
+                return BadRequest(ex.Message);
             }
 
-            _logger.LogTrace($"[AdditionalPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
+            _logger.LogInfo($"[AdditionalPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
 
             return Ok(calcRes.Id);
         }
@@ -64,7 +70,7 @@ namespace Geek.Controllers
         [Route("subtraction/{a}/{b}")]
         public async Task<IActionResult> SubtractionPost(double a, double b)
         {
-            _logger.LogTrace($"[SubtractionPost] first number: {a}, second number: {b}");
+            _logger.LogInfo($"[SubtractionPost] first number: {a}, second number: {b}");
 
             CalcResult calcRes = null;
             try
@@ -76,9 +82,10 @@ namespace Geek.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"[SubtractionPost] error: {ex.Message}, stack: {ex.StackTrace}, innerException: {ex.InnerException?.Message}");
+                return BadRequest(ex.Message);
             }
 
-            _logger.LogTrace($"[SubtractionPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
+            _logger.LogInfo($"[SubtractionPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
 
             return Ok(calcRes.Id);
         }
@@ -87,7 +94,7 @@ namespace Geek.Controllers
         [Route("multiplication/{a}/{b}")]
         public async Task<IActionResult> MultiplicationPost(double a, double b)
         {
-            _logger.LogTrace($"[MultiplicationPost] first number: {a}, second number: {b}");
+            _logger.LogInfo($"[MultiplicationPost] first number: {a}, second number: {b}");
 
             CalcResult calcRes = null;
             try
@@ -99,9 +106,10 @@ namespace Geek.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"[SubtractionPost] error: {ex.Message}, stack: {ex.StackTrace}, innerException: {ex.InnerException?.Message}");
+                return BadRequest(ex.Message);
             }
 
-            _logger.LogTrace($"[MultiplicationPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
+            _logger.LogInfo($"[MultiplicationPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
 
             return Ok(calcRes.Id);
         }
@@ -110,7 +118,7 @@ namespace Geek.Controllers
         [Route("division/{a}/{b}")]
         public async Task<IActionResult> DivisionPost(double a, double b)
         {
-            _logger.LogTrace($"[DivisionPost] first number: {a}, second number: {b}");
+            _logger.LogInfo($"[DivisionPost] first number: {a}, second number: {b}");
 
             CalcResult calcRes = null;
             try
@@ -122,18 +130,19 @@ namespace Geek.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"[SubtractionPost] error: {ex.Message}, stack: {ex.StackTrace}, innerException: {ex.InnerException?.Message}");
+                return BadRequest(ex.Message);
             }
 
-            _logger.LogTrace($"[DivisionPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
+            _logger.LogInfo($"[DivisionPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
 
             return Ok(calcRes.Id);
         }
 
         [HttpPost]
-        [Route("exponentiation/{a}/{b}")]
+        [Route("exponentiation/{number}")]
         public async Task<IActionResult> ExponentiationPost(double number)
         {
-            _logger.LogTrace($"[ExponentiationPost] number: {number}");
+            _logger.LogInfo($"[ExponentiationPost] number: {number}");
 
             CalcResult calcRes = null;
             try
@@ -145,9 +154,10 @@ namespace Geek.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"[SubtractionPost] error: {ex.Message}, stack: {ex.StackTrace}, innerException: {ex.InnerException?.Message}");
+                return BadRequest(ex.Message);
             }
 
-            _logger.LogTrace($"[ExponentiationPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
+            _logger.LogInfo($"[ExponentiationPost] result: {calcRes?.Result}, Id: {calcRes?.Id}");
 
             return Ok(calcRes.Id);
         }

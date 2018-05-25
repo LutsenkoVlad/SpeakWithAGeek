@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Geek.Models
+namespace Geek.Models.Entities
 {
     public class CalcResult
     {
@@ -16,5 +16,7 @@ namespace Geek.Models
             Id = Guid.NewGuid();
             Result = result;
         }
+
+        public CalcResult() { }
     }
 }

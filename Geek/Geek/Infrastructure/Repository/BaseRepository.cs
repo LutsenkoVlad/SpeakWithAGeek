@@ -25,6 +25,8 @@ namespace Geek.Infrastructure.Repository
 
         public IEnumerable<TEntity> GetAll() => _dbSet;
 
+        public async Task<IList<TEntity>> ToListAsync() => await _dbSet.AsQueryable().ToListAsync();
+
         public IQueryable<TEntity> GetAllAsQueryable() => _dbSet.AsQueryable();
 
         public TEntity GetById(int id) => _dbSet.Find(id);
@@ -54,5 +56,6 @@ namespace Geek.Infrastructure.Repository
         Task SaveChangesAsync();
         void SaveChanges();
         Task<TEntity> GetByGuidAsync(Guid id);
+        Task<IList<TEntity>> ToListAsync();
     }
 }

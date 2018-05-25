@@ -17,17 +17,4 @@ namespace Geek.Infrastructure.Service
 
         public double Sub(double a, double b) => a - b;
     }
-
-    public interface ICalculateService
-    {
-        double Add(double a, double b);
-
-        double Sub(double a, double b);
-
-        double Mul(double a, double b);
-
-        double Div(double a, double b);
-
-        double Exp(double number);
-    }
 }
